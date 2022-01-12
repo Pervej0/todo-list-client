@@ -1,5 +1,4 @@
 import "./App.css";
-import ListContainer from "./Component/ListContainer";
 import ToDo from "./Component/ToDo";
 
 function App() {
@@ -9,7 +8,6 @@ function App() {
         Welcome to my app
       </h1>
       <ToDo />
-      <ListContainer />
     </div>
   );
 }
