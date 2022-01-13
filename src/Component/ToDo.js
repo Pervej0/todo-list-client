@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import ListContainer from "./ListContainer";
+import Spinner from "./Spinner";
 
 const ToDo = () => {
   const [input, setInput] = useState("");
-  //   const [isEdited, SetIsEdited] = useState(false);
   const [buttonText, setButtonText] = useState("Add");
   const [taskId, setTaskId] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const handleToDOList = (e) => {
+    setIsLoaded(true);
     e.preventDefault();
     const data = {
       time: new Date().toLocaleTimeString(),
@@ -15,9 +17,11 @@ const ToDo = () => {
       task: input,
     };
     let buttonText = e.target.children[1].innerText;
+    console.log(buttonText);
     if (buttonText === "Add") {
+      console.log("ADDDDDD");
       fetch("http://localhost:4000/task", {
-        method: "post",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -25,7 +29,10 @@ const ToDo = () => {
       })
         .then((res) => res.json())
         .then((result) => {
-          if (result.acknowledged) alert("Task successfully added");
+          if (result.acknowledged) {
+            setIsLoaded(false);
+            alert("Task successfully added");
+          }
         });
     }
 
@@ -39,10 +46,12 @@ const ToDo = () => {
       })
         .then((res) => res.json())
         .then((result) => {
-          if (result.acknowledged) alert("Task successfully updated");
+          if (result.acknowledged) {
+            setIsLoaded(false);
+            alert("Task successfully updated");
+          }
         });
       setButtonText("Add");
-      //   SetIsEdited(false);
     }
     setInput("");
   };
@@ -52,14 +61,7 @@ const ToDo = () => {
     setTaskId(id);
     console.log(id);
     setInput(text);
-    // SetIsEdited(true);
     setButtonText("Update");
-
-    /*    if (buttonText === "Add") {
-      e.target.setAttribute("disabled", true);
-    } else {
-      e.target.removeAttribute("disabled");
-    } */
   };
 
   return (
@@ -81,8 +83,13 @@ const ToDo = () => {
             {buttonText}
           </button>
         </form>
+        {isLoaded && <Spinner />}
       </section>
-      <ListContainer handleEdit={handleEdit} buttonText={buttonText} />
+      <ListContainer
+        handleEdit={handleEdit}
+        buttonText={buttonText}
+        setIsLoaded={setIsLoaded}
+      />
     </>
   );
 };

@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from "react";
 
-const ListContainer = ({ handleEdit, buttonText }) => {
+const ListContainer = ({ handleEdit, buttonText, setIsLoaded }) => {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:4000/task")
       .then((res) => res.json())
-      .then((data) => setTasks(data));
+      .then((data) => {
+        if (data) {
+          setTasks(data);
+          console.log("ok");
+        }
+      });
   }, [tasks, buttonText]);
 
   // handleDelete functionality
-
   const handleDelete = (id) => {
     const confirmation = window.confirm("Are you sure want to delete this?");
     if (confirmation) {
+      setIsLoaded(true);
       fetch(`http://localhost:4000/task/${id}`, {
         method: "DELETE",
         headers: {
@@ -22,19 +27,24 @@ const ListContainer = ({ handleEdit, buttonText }) => {
       })
         .then((res) => res.json())
         .then((result) => {
-          if (result.acknowledged) alert("Task successfully deleted");
+          if (result.acknowledged) {
+            setIsLoaded(false);
+            alert("Task successfully deleted");
+          }
         });
+    } else {
+      return;
     }
   };
 
   return (
-    <section className="container text-left mx-4 md:mx-20 mt-20">
+    <section className="text-left mx-4 md:mx-20 mt-20">
       <div className="grid md:grid-cols-2 grid-cols-1 gap-8">
         <div>
           {tasks?.map((item) => (
             <div
               key={item._id}
-              className="bg-white border border-green-500 w-full p-3 my-5 flex justify-between items-center"
+              className="bg-white border border-green-500 w-full p-2 my-5 flex flex-wrap gap-2 justify-between items-center"
             >
               <div>
                 <small className="font-semibold">Date: {item.date}</small>
@@ -58,20 +68,22 @@ const ListContainer = ({ handleEdit, buttonText }) => {
             </div>
           ))}
         </div>
-        <div className="border-0 border-white border-l py-6">
-          <div className="px-10 font-mono text-white">
-            <blockquote className="py-6">
-              "It's not enough to be busy, so are the ants. The question is,
-              what are we busy about?"
-            </blockquote>
-            <p>-- Henry David Thoreau</p>
-          </div>
-          <div className="px-10 font-mono text-white">
-            <blockquote className="py-6">
-              "Time is more valuable than money. You can get more money, but you
-              cannot get more time."
-            </blockquote>
-            <p>-- Jim Rohn</p>
+        <div className="border-0 md:border-l md:border-t-0 border-t border-white py-6">
+          <div>
+            <div className="px-10 font-mono text-white">
+              <blockquote className="py-6">
+                "It's not enough to be busy, so are the ants. The question is,
+                what are we busy about?"
+              </blockquote>
+              <p>-- Henry David Thoreau</p>
+            </div>
+            <div className="px-10 font-mono text-white">
+              <blockquote className="py-6">
+                "Time is more valuable than money. You can get more money, but
+                you cannot get more time."
+              </blockquote>
+              <p>-- Jim Rohn</p>
+            </div>
           </div>
         </div>
       </div>
