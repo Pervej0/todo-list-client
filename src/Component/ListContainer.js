@@ -4,7 +4,7 @@ const ListContainer = ({ handleEdit, buttonText, setIsLoaded }) => {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/task")
+    fetch("https://sleepy-ravine-13253.herokuapp.com/task")
       .then((res) => res.json())
       .then((data) => {
         if (data) {
@@ -19,7 +19,7 @@ const ListContainer = ({ handleEdit, buttonText, setIsLoaded }) => {
     const confirmation = window.confirm("Are you sure want to delete this?");
     if (confirmation) {
       setIsLoaded(true);
-      fetch(`http://localhost:4000/task/${id}`, {
+      fetch(`https://sleepy-ravine-13253.herokuapp.com/task/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

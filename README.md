@@ -1,6 +1,6 @@
 # React ToDo List
 
-This is a react toDo list implemented with react.
+This is a react base toDo list application.
 
 # Live Site
 

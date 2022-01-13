@@ -20,7 +20,7 @@ const ToDo = () => {
     console.log(buttonText);
     if (buttonText === "Add") {
       console.log("ADDDDDD");
-      fetch("http://localhost:4000/task", {
+      fetch("https://sleepy-ravine-13253.herokuapp.com/task", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,7 +37,7 @@ const ToDo = () => {
     }
 
     if (buttonText === "Update") {
-      fetch(`http://localhost:4000/task/${taskId}`, {
+      fetch(`https://sleepy-ravine-13253.herokuapp.com/task/${taskId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
